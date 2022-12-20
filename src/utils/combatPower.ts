@@ -14,30 +14,33 @@ interface CPProps {
 }
 
 export interface StatProduct {
-    // Attack product for the pokemon
-    atk: number;
-    // Defense product for the pokemon
-    def: number;
-    // Stamina product for the pokemon
-    sta: number;
-    // Combat Power of the pokemon
-    cp: number;
-    // Total stat product for the pokemon
-    sp: number;
-    // Custom stats for the pokemon
-    custom: {
-        atk: number;
-        def: number;
-        hp: number;
-        lvl: number;
-    }
+	// Attack product for the pokemon
+	atk: number;
+	// Defense product for the pokemon
+	def: number;
+	// Stamina product for the pokemon
+	hp: number;
+	// Combat Power of the pokemon
+	cp: number;
+	// Total stat product for the pokemon
+	sp: number;
+	// Custom stats for the pokemon
+	custom: {
+		atk: number;
+		def: number;
+		hp: number;
+		lvl: number;
+	};
 }
 
 // Calculates the Combat Power (CP) for the pokmeon with these specific ivs
-export const combatPower = (stats: CPProps): TableRow => {
+export const combatPower = (stats: CPProps): StatProduct => {
 	const { base, custom } = stats;
 
-	const cpmIdx = custom.lvl * 2 - 1;
+	// level 1: 1-1*2 = 0
+	// level 2: 2-1*2 = 2
+	// level 51: 51-1*2 = 100
+	const cpmIdx = (custom.lvl - 1) * 2;
 
 	// Combat Power Multiplier (CPM) is a number Niantic uses to scale the attributes of Pokemon
 	// Source: https://gamepress.gg/pokemongo/cp-multiplier
@@ -72,10 +75,17 @@ export const combatPower = (stats: CPProps): TableRow => {
 	let cp = Math.max(Math.floor((atk * def ** 0.5 * hp ** 0.5) / 10), 10);
 
 	hp = Math.floor(hp);
-	let sp = Number(Math.round(atk * def * hp) / 1000).toFixed(3);
+	let sp = +(Math.round(atk * def * hp) / 1000).toFixed(3);
 
-	atk = Number((Math.round(atk * 100) / 100).toFixed(2));
-	def = Number((Math.round(def * 100) / 100).toFixed(2));
+	atk = +(Math.round(atk * 100) / 100).toFixed(2);
+	def = +(Math.round(def * 100) / 100).toFixed(2);
 
 	return { cp, atk, def, hp, sp, custom };
 };
+
+// lvl to arrayindex
+// 1 = 0
+// 1.5 = 1
+// 2 = 2
+// 2.5 = 3
+// 3 = 4

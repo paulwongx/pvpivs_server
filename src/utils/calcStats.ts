@@ -45,7 +45,7 @@ const calcStats = (pokemon: PokemonProps) => {
 	for (let atk = 0; atk <= 15; atk++) {
 		for (let def = 0; def <= 15; def++) {
 			for (let hp = 0; hp <= 15; hp++) {
-				for (let lvl = 51; lvl >= 0; lvl -= 0.5) {
+				for (let lvl = 51; lvl >= 1; lvl -= 0.5) {
 					let stats = {
 						custom: { atk, def, hp, lvl },
 						base: pokemon.baseStats,
@@ -68,41 +68,8 @@ const calcStats = (pokemon: PokemonProps) => {
 	ultra.sort((a, b) => b.sp - a.sp);
 	master.sort((a, b) => b.sp - a.sp);
 
-	// Add percentages for each table
-	// for (let i = 0; i < little.length; i++) {
-	// 	little[i]["rank"] = i + 1;
-	// 	little[i]["percentage"] = (
-	// 		Math.round((little[i]["sp"] / little[0]["sp"]) * 10000) / 100
-	// 	).toFixed(2);
-	// 	little[i]["sp"] = little[i]["sp"].toFixed(3);
-	// }
-
-	// for (let i = 0; i < greatLeague.length; i++) {
-	// 	gt[i]["rank"] = i + 1;
-	// 	gt[i]["percentage"] = (
-	// 		Math.round((gt[i]["sp"] / gt[0]["sp"]) * 10000) / 100
-	// 	).toFixed(2);
-	// 	gt[i]["sp"] = gt[i]["sp"].toFixed(3);
-	// }
-
-	// for (let i = 0; i < ut.length; i++) {
-	// 	ut[i]["rank"] = i + 1;
-	// 	ut[i]["percentage"] = (
-	// 		Math.round((ut[i]["sp"] / ut[0]["sp"]) * 10000) / 100
-	// 	).toFixed(2);
-	// 	ut[i]["sp"] = ut[i]["sp"].toFixed(3);
-	// }
-
-	// for (let i = 0; i < mt.length; i++) {
-	// 	mt[i]["rank"] = i + 1;
-	// 	mt[i]["percentage"] = (
-	// 		Math.round((mt[i]["sp"] / mt[0]["sp"]) * 10000) / 100
-	// 	).toFixed(2);
-	// 	mt[i]["sp"] = mt[i]["sp"].toFixed(3);
-	// }
-
 	return {
-		data: { lt, gt, ut, mt },
+		data: { little, great, ultra, master },
 		pokemon: pokemon,
 	};
 };
