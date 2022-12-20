@@ -1,9 +1,8 @@
 import path from "path";
-import fetch from "node-fetch";
-// import got from "got";
-// import ky from 'ky-universal';
-import * as cheerio from "cheerio";
 import * as fs from "fs/promises";
+import fetch from "node-fetch";
+import * as cheerio from "cheerio";
+import { writeFile } from "./writeFile";
 
 interface Pokemon {
 	dex: number | null;
@@ -13,7 +12,7 @@ interface Pokemon {
 const getPopular = async () => {
 	const url = "https://www.gamepress.gg/pokemongo/popular-pokemon-all";
 	const response = await fetch(url);
-    const body = await response.text();
+	const body = await response.text();
 	const $ = cheerio.load(body);
 	const re = /\/pokemongo\/pokemon\/(.*)/;
 
@@ -37,22 +36,15 @@ const getPopular = async () => {
 	const json = res.filter(x => x.dex !== null);
 
 	const file = {
-        date: new Date(),
-        pokemon: json
-    }
+		date: new Date(),
+		pokemon: json,
+	};
 
-    await createFile(file);
-    return file;
-};
-
-const createFile = async (json: any) => {
-	return await fs.writeFile(
-		path.join(__dirname, "popular.json"),
-		JSON.stringify(json)
-	);
+	await writeFile("popular.json", file);
+	return file;
 };
 
 (async () => {
 	const res = await getPopular();
-    console.log(res);
+	console.log(res);
 })();
