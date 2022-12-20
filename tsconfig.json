@@ -1,0 +1,28 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+        // "target": "ESNext",
+		// "moduleResolution": "Node",
+		// "types": ["node"],
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noUncheckedIndexedAccess": true,
+		"allowSyntheticDefaultImports": true,
+		"jsx": "preserve",
+		"incremental": true,
+		"strict": true,
+		"esModuleInterop": true,
+		"composite": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"outDir": "dist",
+		"lib": ["esnext"]
+	},
+	"references": [
+		{
+			"path": "./tsconfig.build.json"
+		}
+	],
+	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"],
+	"exclude": ["node_modules"]
+}

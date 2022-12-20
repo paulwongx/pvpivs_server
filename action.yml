@@ -1,0 +1,7 @@
+name: 'Popular Pokemon'
+author: 'wongx'
+description: 'Fetches the most popular pokemon'
+
+runs:
+  using: 'node16'
+  main: 'dist/popular.js'
