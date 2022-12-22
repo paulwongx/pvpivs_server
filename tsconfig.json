@@ -10,7 +10,7 @@
 		"allowSyntheticDefaultImports": true,
 		"jsx": "preserve",
 		"incremental": true,
-		"strict": true,
+		"strict": false,
 		"esModuleInterop": true,
 		"composite": true,
 		"skipLibCheck": true,

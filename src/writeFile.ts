@@ -10,7 +10,7 @@ export const writeFile = async (name: string, json: any) => {
 	const filename = path.extname(name) === ".json" ? name : name + ".json";
 
 	return await fs.writeFile(
-		path.join(__dirname, filename),
+		path.join(__dirname, "data", filename),
 		JSON.stringify(json)
 	);
 };
