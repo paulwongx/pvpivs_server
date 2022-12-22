@@ -2,7 +2,6 @@ import path from "path";
 import * as fs from "fs/promises";
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
-import { writeFile } from "./writeFile";
 
 interface Pokemon {
 	dex: number | null;
@@ -40,7 +39,10 @@ const getPopular = async () => {
 		pokemon: json,
 	};
 
-	await writeFile("popular.json", file);
+	await fs.writeFile(
+		path.join(__dirname, "popular.json"),
+		JSON.stringify(file)
+	);
 	return file;
 };
 

@@ -1,6 +1,6 @@
 Cost of storage
 
 File size = 1.5MB
-Number of pokemon (excl shadows) = 1086
+Number of pokemon (excl shadows) = 1079
 
-Total = 1.629 GB
+Total = 1.62 GB

@@ -5,8 +5,7 @@ import gameMaster from "./gameMaster.json";
 // ts-node ./src/getSingleIV.ts
 const getIVs = async (pokemon: GameMasterPokemonProps) => {
 	const json = statProduct({
-		baseStats: pokemon.baseStats,
-		dex: pokemon.dex,
+		baseStats: pokemon.baseStats
 	});
 
     // console.log("best", {

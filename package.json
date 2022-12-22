@@ -6,13 +6,15 @@
 	},
 	"devDependencies": {
 		"@types/node": "^18.11.17",
-        "@types/node-fetch": "^2.6.2",
+		"@types/node-fetch": "^2.6.2",
 		"typescript": "^4.9.4"
 	},
 	"dependencies": {
 		"@actions/core": "^1.10.0",
 		"@actions/github": "^5.1.1",
+		"@ygoe/msgpack": "^1.0.3",
 		"cheerio": "^1.0.0-rc.12",
+		"hjson": "^3.2.2",
 		"node-fetch": "2"
 	}
 }

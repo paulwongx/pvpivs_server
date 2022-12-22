@@ -12,7 +12,7 @@ export interface StatProduct {
 	// Custom stats for the pokemon
 	atk: number;
 	def: number;
-	hp: number;
+	sta: number;
 	lvl: number;
 }
 
@@ -45,7 +45,6 @@ export interface GameMasterPokemonProps {
 }
 
 interface StatProductProps {
-	dex: number;
 	baseStats: {
 		atk: number;
 		def: number;
@@ -54,7 +53,10 @@ interface StatProductProps {
 	floor?: number;
 	minLevel?: number;
 	maxLevel?: number;
+    dex: number;
+	speciesId: string;
 	benchmark?: boolean;
+    verbose?: boolean;
 }
 
 interface TableRow extends StatProduct {
@@ -64,8 +66,9 @@ interface TableRow extends StatProduct {
 
 export const statProduct = (props: StatProductProps) => {
 	const {
+        dex,
+        speciesId,
 		baseStats: base,
-		dex,
 		floor = 0,
 		maxLevel = 50,
 		minLevel = 1,
@@ -74,21 +77,22 @@ export const statProduct = (props: StatProductProps) => {
 
 	let t0 = new Date().getTime();
 
-	if (base === null && Object.keys(base).length !== 0) return;
+	if (base === null || Object.keys(base).length === 0) return;
+	if (dex === null || speciesId === null) return;
 
-	let little: TableRow[] = [];
-	let great: TableRow[] = [];
-	let ultra: TableRow[] = [];
-	let master: TableRow[] = [];
+	let cp500: TableRow[] = [];
+	let cp1500: TableRow[] = [];
+	let cp2500: TableRow[] = [];
+	let cpMax: TableRow[] = [];
 
 	for (let atk = +floor; atk <= 15; atk++) {
 		for (let def = +floor; def <= 15; def++) {
-			for (let hp = +floor; hp <= 15; hp++) {
+			for (let sta = +floor; sta <= 15; sta++) {
 				let placed = {
-					little: false,
-					great: false,
-					ultra: false,
-					master: false,
+					cp500: false,
+					cp1500: false,
+					cp2500: false,
+					cpMax: false,
 				};
 				for (let lvl = maxLevel; lvl >= minLevel; lvl -= 0.5) {
 					const cpmIdx = (lvl - 1) * 2;
@@ -99,7 +103,7 @@ export const statProduct = (props: StatProductProps) => {
 						Math.floor(
 							((base.atk + atk) *
 								Math.sqrt(base.def + def) *
-								Math.sqrt(base.hp + hp) *
+								Math.sqrt(base.hp + sta) *
 								mul *
 								mul) /
 								10
@@ -107,52 +111,52 @@ export const statProduct = (props: StatProductProps) => {
 					);
 					let aSt = (base.atk + atk) * mul; // atk stat
 					let dSt = (base.def + def) * mul; // def stat
-					let hSt = Math.floor((base.hp + hp) * mul); // hp stat
+					let hSt = Math.floor((base.hp + sta) * mul); // sta stat
 					let sp = Math.round(aSt * dSt * hSt); // statProd
 
 					aSt = Math.round(aSt * 100) / 100;
 					dSt = Math.round(dSt * 100) / 100;
 
-					const prod = { cp, aSt, dSt, hSt, sp, atk, def, hp, lvl };
+					const prod = { cp, aSt, dSt, hSt, sp, atk, def, sta, lvl };
 
 					if (cp <= 500) {
 						// Replace the iv spread for this level if statProduct is higher
-						if (placed.little && sp > little.at(-1).sp) {
-							little.pop();
-							little.push(prod);
-						} else if (!placed.little) {
-							little.push(prod);
-							placed.little = true;
+						if (placed.cp500 && sp > cp500.at(-1).sp) {
+							cp500.pop();
+							cp500.push(prod);
+						} else if (!placed.cp500) {
+							cp500.push(prod);
+							placed.cp500 = true;
 						}
 					}
 
 					if (cp <= 1500) {
-						if (placed.great && sp > great.at(-1).sp) {
-							great.pop();
-							great.push(prod);
-						} else if (!placed.great) {
-							great.push(prod);
-							placed.great = true;
+						if (placed.cp1500 && sp > cp1500.at(-1).sp) {
+							cp1500.pop();
+							cp1500.push(prod);
+						} else if (!placed.cp1500) {
+							cp1500.push(prod);
+							placed.cp1500 = true;
 						}
 					}
 
 					if (cp <= 2500) {
-						if (placed.ultra && prod.sp > ultra.at(-1).sp) {
-							ultra.pop();
-							ultra.push(prod);
-						} else if (!placed.ultra) {
-							ultra.push(prod);
-							placed.ultra = true;
+						if (placed.cp2500 && prod.sp > cp2500.at(-1).sp) {
+							cp2500.pop();
+							cp2500.push(prod);
+						} else if (!placed.cp2500) {
+							cp2500.push(prod);
+							placed.cp2500 = true;
 						}
 					}
 
 					if (lvl === maxLevel) {
-						if (placed.master && prod.sp > master.at(-1).sp) {
-							master.pop();
-							master.push(prod);
-						} else if (!placed.master) {
-							master.push(prod);
-							placed.master = true;
+						if (placed.cpMax && prod.sp > cpMax.at(-1).sp) {
+							cpMax.pop();
+							cpMax.push(prod);
+						} else if (!placed.cpMax) {
+							cpMax.push(prod);
+							placed.cpMax = true;
 						}
 					}
 				}
@@ -166,16 +170,16 @@ export const statProduct = (props: StatProductProps) => {
 	}
 
 	// Sort the values in ascending order by stat product (sp)
-	little.sort((a, b) => b.sp - a.sp);
-	great.sort((a, b) => b.sp - a.sp);
-	ultra.sort((a, b) => b.sp - a.sp);
-	master.sort((a, b) => b.sp - a.sp);
+	cp500.sort((a, b) => b.sp - a.sp);
+	cp1500.sort((a, b) => b.sp - a.sp);
+	cp2500.sort((a, b) => b.sp - a.sp);
+	cpMax.sort((a, b) => b.sp - a.sp);
 
 	// console.log("lengths", {
-	// 	little: little.length,
-	// 	great: great.length,
-	// 	ultra: ultra.length,
-	// 	master: master.length,
+	// 	cp500: cp500.length,
+	// 	cp1500: cp1500.length,
+	// 	cp2500: cp2500.length,
+	// 	cpMax: cpMax.length,
 	// });
 
 	if (benchmark) {
@@ -184,7 +188,16 @@ export const statProduct = (props: StatProductProps) => {
 	}
 
 	return {
-		data: { little, great, ultra, master },
+        pokemon: {
+            dex,
+            speciesId,
+        },
+        ivs: {
+            cp500,
+            cp1500,
+            cp2500,
+            cpMax,
+        }
 	};
 };
 
