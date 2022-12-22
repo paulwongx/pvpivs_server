@@ -4,5 +4,4 @@ node_modules
 dist
 trash
 
-./src/data
-./src/**/*.json
+./src/data/ivs
