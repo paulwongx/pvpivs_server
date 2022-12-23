@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import fs from "fs/promises";
+import fsp from "fs/promises";
 import { GameMasterPokemonProps } from "./statProduct";
 import path from "path";
 
@@ -31,7 +31,7 @@ const getGameMaster = async () => {
 		return true;
 	});
 
-	await fs.writeFile(
+	await fsp.writeFile(
 		path.join(__dirname, "data", "gameMaster.json"),
 		JSON.stringify(gameMaster)
 	);

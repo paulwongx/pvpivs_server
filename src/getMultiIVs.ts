@@ -1,6 +1,5 @@
 import { GameMasterPokemonProps, statProduct } from "./statProduct";
 import gameMaster from "./data/gameMaster.json";
-import * as fsp from "fs/promises";
 import * as fs from "fs";
 import path from "path";
 

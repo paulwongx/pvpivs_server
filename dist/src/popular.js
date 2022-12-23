@@ -62,9 +62,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
+var path_1 = __importDefault(require("path"));
+var fs = __importStar(require("fs/promises"));
 var node_fetch_1 = __importDefault(require("node-fetch"));
 var cheerio = __importStar(require("cheerio"));
-var writeFile_1 = require("./writeFile");
 var getPopular = function () { return __awaiter(void 0, void 0, void 0, function () {
     var url, response, body, $, re, res, json, file;
     return __generator(this, function (_a) {
@@ -99,7 +100,7 @@ var getPopular = function () { return __awaiter(void 0, void 0, void 0, function
                     date: new Date(),
                     pokemon: json
                 };
-                return [4 /*yield*/, (0, writeFile_1.writeFile)("popular.json", file)];
+                return [4 /*yield*/, fs.writeFile(path_1["default"].join(__dirname, "popular.json"), JSON.stringify(file))];
             case 3:
                 _a.sent();
                 return [2 /*return*/, file];
