@@ -40,7 +40,7 @@ const getPopular = async () => {
 	};
 
 	await fs.writeFile(
-		path.join(__dirname, "popular.json"),
+		path.join(__dirname, "data", "popular.json"),
 		JSON.stringify(file)
 	);
 	return file;

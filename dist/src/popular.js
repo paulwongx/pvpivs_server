@@ -100,7 +100,7 @@ var getPopular = function () { return __awaiter(void 0, void 0, void 0, function
                     date: new Date(),
                     pokemon: json
                 };
-                return [4 /*yield*/, fs.writeFile(path_1["default"].join(__dirname, "popular.json"), JSON.stringify(file))];
+                return [4 /*yield*/, fs.writeFile(path_1["default"].join(__dirname, "data", "popular.json"), JSON.stringify(file))];
             case 3:
                 _a.sent();
                 return [2 /*return*/, file];
