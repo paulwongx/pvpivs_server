@@ -47,6 +47,7 @@ const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
         "Giratina (Altered Forme)": "giratina_altered",
         "Giratina (Origin Forme)": "giratina_origin",
         "Galarian Darmanitan": "darmanitan_galarian_standard",
+        "Galarian Mr. Mime": "mr_mime_galarian",
     }
 
 	let mapped = [];
