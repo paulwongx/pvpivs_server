@@ -38,19 +38,31 @@ export const scrapePopular = async () => {
 	return json;
 };
 
+
 const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
-	const gameMaster = await getGameMaster();
+    const gameMaster = await getGameMaster();
 	const pokemon = gameMaster.pokemon as GameMasterPokemon[];
+
+    const nameMapping = {
+        "Giratina (Altered Forme)": "giratina_altered",
+        "Giratina (Origin Forme)": "giratina_origin",
+        "Galarian Darmanitan": "darmanitan_galarian_standard",
+    }
 
 	let mapped = [];
 	for (let i = 0; i < popular.length; i++) {
 		const dex = popular[i].dex;
 		const name = popular[i].name;
 
-		const gmPokemon = pokemon.filter(pkm => pkm.dex === dex);
+        if (/shadow/ig.test(name)) continue;
+
+		let gmPokemon = pokemon.filter(pkm => pkm.dex === dex);
 		if (gmPokemon.length === 1) {
-			mapped.push({ dex, speciesId: gmPokemon[0].speciesId });
-		} else if (gmPokemon.length > 1) {
+			mapped.push(gmPokemon[0]);
+		} else if (nameMapping[name]) {
+            gmPokemon = pokemon.filter(pkm => pkm.speciesId === nameMapping[name]);
+            mapped.push(gmPokemon[0]);
+        } else if (gmPokemon.length > 1) {
 			let encoded = name.replace(/[.*+?^${}()|[\]\\]/g, "");
 			let encoded1 = encoded
 				.trim()
@@ -71,7 +83,7 @@ const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
 				sel = gmPokemon.filter(p => regex2.test(p.speciesId));
 			}
 			if (sel.length === 1) {
-				mapped.push({ dex, speciesId: sel[0].speciesId });
+				mapped.push(sel[0]);
 			} else {
 				console.log(
 					`Could not map the following pokemon to speciesId: ${JSON.stringify({
