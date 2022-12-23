@@ -1,21 +1,22 @@
-import path from "path";
-import * as fs from "fs/promises";
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
+import { getGameMaster } from "./getGameMaster";
+import type { GameMasterPokemon } from "./getGameMaster";
 
-interface Pokemon {
+interface PopularPokemon {
 	dex: number | null;
 	name: string;
 }
 
-export const getPopular = async () => {
+// ts-node ./src/getPopular.ts
+export const scrapePopular = async () => {
 	const url = "https://www.gamepress.gg/pokemongo/popular-pokemon-all";
-	const response = await fetch(url);
-	const body = await response.text();
+	const raw = await fetch(url);
+	const body = await raw.text();
 	const $ = cheerio.load(body);
 	const re = /\/pokemongo\/pokemon\/(.*)/;
 
-	let res: Pokemon[] = [];
+	let res: PopularPokemon[] = [];
 
 	$(".view-id-popular_pages")
 		.find(".view-content li a")
@@ -34,19 +35,63 @@ export const getPopular = async () => {
 		});
 	const json = res.filter(x => x.dex !== null);
 
-	const file = {
-		date: new Date(),
-		pokemon: json,
-	};
-
-	await fs.writeFile(
-		path.join(process.cwd(), "src", "data", "popular.json"),
-		JSON.stringify(file)
-	);
-	return file;
+	return json;
 };
 
-(async () => {
-	const res = await getPopular();
-	console.log(res);
-})();
+const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
+	const gameMaster = await getGameMaster();
+	const pokemon = gameMaster.pokemon as GameMasterPokemon[];
+
+	let mapped = [];
+	for (let i = 0; i < popular.length; i++) {
+		const dex = popular[i].dex;
+		const name = popular[i].name;
+
+		const gmPokemon = pokemon.filter(pkm => pkm.dex === dex);
+		if (gmPokemon.length === 1) {
+			mapped.push({ dex, speciesId: gmPokemon[0].speciesId });
+		} else if (gmPokemon.length > 1) {
+			let encoded = name.replace(/[.*+?^${}()|[\]\\]/g, "");
+			let encoded1 = encoded
+				.trim()
+				.split(/[\s-]+/)
+				.join("_");
+			let encoded2 = encoded
+				.trim()
+				.split(/[\s-]+/)
+				.reverse()
+				.join("_");
+
+			const regex1 = new RegExp(`^${encoded1}$`, "ig");
+			const regex2 = new RegExp(`^${encoded2}$`, "ig");
+
+			let sel = [];
+			sel = gmPokemon.filter(p => regex1.test(p.speciesId));
+			if (sel.length === 0) {
+				sel = gmPokemon.filter(p => regex2.test(p.speciesId));
+			}
+			if (sel.length === 1) {
+				mapped.push({ dex, speciesId: sel[0].speciesId });
+			} else {
+				console.log(
+					`Could not map the following pokemon to speciesId: ${JSON.stringify({
+						dex,
+						name,
+						sel,
+					},null,4)}`
+				);
+			}
+		}
+	}
+
+	return mapped;
+};
+
+export const getPopular = async () => {
+	const raw = await scrapePopular();
+	if (!raw || raw.length === 0) return;
+
+	const pokemon = await mapNameToSpeciesId(raw);
+	console.log(`There are ${pokemon.length} popular Pokemon processed`);
+	return {date: new Date(), pokemon};
+};

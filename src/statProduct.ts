@@ -16,34 +16,6 @@ export interface StatProduct {
 	lvl: number;
 }
 
-export interface GameMasterPokemonProps {
-	dex: number;
-	speciesName: string;
-	speciesId: string;
-	baseStats: {
-		atk: number;
-		def: number;
-		hp: number;
-	};
-	types: string[];
-	fastMoves: string[];
-	chargedMoves: string[];
-	tags: string[];
-	defaultIVs: {
-		cp500: number[];
-		cp1500: number[];
-		cp2500: number[];
-	};
-	level25CP: number;
-	buddyDistance: number;
-	thirdMoveCost: number;
-	released: boolean;
-	family: {
-		id: string;
-		evolutions: string[];
-	};
-}
-
 interface StatProductProps {
 	baseStats: {
 		atk: number;

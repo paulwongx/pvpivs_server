@@ -4,4 +4,4 @@ description: 'Fetches the most popular pokemon'
 
 runs:
   using: 'node16'
-  main: 'dist/src/popular.js'
+  main: 'dist/src/index.js'

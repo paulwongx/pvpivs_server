@@ -13,6 +13,6 @@
 		"@actions/core": "^1.10.0",
 		"@actions/github": "^5.1.1",
 		"cheerio": "^1.0.0-rc.12",
-		"node-fetch": "^3.3.0"
+		"node-fetch": "2.0"
 	}
 }

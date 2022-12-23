@@ -1,10 +1,11 @@
-import { GameMasterPokemonProps, statProduct } from "./statProduct";
+import { statProduct } from "./statProduct";
 import gameMaster from "./data/gameMaster.json";
 import * as fs from "fs";
 import path from "path";
+import { GameMasterPokemon } from "./getGameMaster";
 
 // ts-node ./src/getMultiIVs.ts
-const getMultiIVs = async (pokemon: GameMasterPokemonProps) => {
+const getMultiIVs = async (pokemon: GameMasterPokemon) => {
     new Promise(async (resolve, reject) => {
         const json = statProduct({
             baseStats: pokemon.baseStats,
@@ -49,27 +50,10 @@ const getSummary = async () => {
 
 
 (async () => {
-	let pokemon = gameMaster.pokemon as GameMasterPokemonProps[];
-
-    const regexShadow = /shadow/;
-    const pikachuVariants = [
-        "pikachu_5th_anniversary",
-        "pikachu_flying",
-        "pikachu_kariyushi",
-        "pikachu_libre",
-        "pikachu_pop_star",
-        "pikachu_rock_star",
-        "pikachu_shaymin",
-    ];
-
-    pokemon = pokemon.filter(pkm => {
-        if ((new RegExp(regexShadow)).test(pkm.speciesId)) return false;
-        if (pikachuVariants.includes(pkm.speciesId)) return false;
-        return true;
-    });
+	let pokemon = gameMaster.pokemon as GameMasterPokemon[];
 
     for (let i=0; i<pokemon.length; i++) {
-        const pkmn = pokemon[i] as GameMasterPokemonProps;
+        const pkmn = pokemon[i] as GameMasterPokemon;
         await getMultiIVs(pkmn);
     }
 

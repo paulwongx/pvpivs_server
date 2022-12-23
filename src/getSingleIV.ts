@@ -1,10 +1,11 @@
 import path from "path";
-import { GameMasterPokemonProps, statProduct } from "./statProduct";
+import { statProduct } from "./statProduct";
 import fsp from "fs/promises";
 import gameMaster from "./data/gameMaster.json";
+import type { GameMasterPokemon } from "./getGameMaster";
 
 // ts-node ./src/getSingleIV.ts
-const getIVs = async (pokemon: GameMasterPokemonProps) => {
+const getIVs = async (pokemon: GameMasterPokemon) => {
     const json = statProduct({
         baseStats: pokemon.baseStats,
         dex: pokemon.dex,
@@ -28,7 +29,7 @@ const getIVs = async (pokemon: GameMasterPokemonProps) => {
 };
 
 (async () => {
-	const pokemon = gameMaster.pokemon as GameMasterPokemonProps[];
-	const venusaur = pokemon?.[4] as GameMasterPokemonProps;
+	const pokemon = gameMaster.pokemon as GameMasterPokemon[];
+	const venusaur = pokemon?.[4] as GameMasterPokemon;
 	await getIVs(venusaur);
 })();
