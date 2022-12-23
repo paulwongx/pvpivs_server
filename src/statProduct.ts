@@ -4,7 +4,7 @@ export interface StatProduct {
 	// Defense product for the pokemon
 	dSt: number;
 	// Stamina product for the pokemon
-	hSt: number;
+	sSt: number;
 	// Combat Power of the pokemon
 	cp: number;
 	// Total stat product for the pokemon
@@ -111,13 +111,13 @@ export const statProduct = (props: StatProductProps) => {
 					);
 					let aSt = (base.atk + atk) * mul; // atk stat
 					let dSt = (base.def + def) * mul; // def stat
-					let hSt = Math.floor((base.hp + sta) * mul); // sta stat
-					let sp = Math.round(aSt * dSt * hSt); // statProd
+					let sSt = Math.floor((base.hp + sta) * mul); // sta stat
+					let sp = Math.round(aSt * dSt * sSt); // statProd
 
 					aSt = Math.round(aSt * 100) / 100;
 					dSt = Math.round(dSt * 100) / 100;
 
-					const prod = { cp, aSt, dSt, hSt, sp, atk, def, sta, lvl };
+					const prod = { cp, aSt, dSt, sSt, sp, atk, def, sta, lvl };
 
 					if (cp <= 500) {
 						// Replace the iv spread for this level if statProduct is higher

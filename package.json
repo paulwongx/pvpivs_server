@@ -12,9 +12,7 @@
 	"dependencies": {
 		"@actions/core": "^1.10.0",
 		"@actions/github": "^5.1.1",
-		"@ygoe/msgpack": "^1.0.3",
 		"cheerio": "^1.0.0-rc.12",
-		"hjson": "^3.2.2",
-		"node-fetch": "2"
+		"node-fetch": "^3.3.0"
 	}
 }

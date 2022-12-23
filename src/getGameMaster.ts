@@ -3,13 +3,13 @@ import fsp from "fs/promises";
 import { GameMasterPokemonProps } from "./statProduct";
 import path from "path";
 
-const getGameMaster = async () => {
+export const getGameMaster = async () => {
 	const url =
 		"https://raw.githubusercontent.com/pvpoke/pvpoke/master/src/data/gamemaster.json";
 	const response = await fetch(url);
 	const gameMaster = await response.json();
 
-	let pokemon = gameMaster.pokemon as GameMasterPokemonProps[];
+	let pokemon = (gameMaster as any).pokemon as GameMasterPokemonProps[];
 
 	// Remove the following:
 	// Shadow pokemon
