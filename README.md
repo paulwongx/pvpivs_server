@@ -8,6 +8,7 @@ Total = 1.62 GB
 TODO:
 - [DONE] Filter to remove shadow pokemon when getting popular pokemon
 - [DONE] Check that the number of pokmeon in the gameMaster didn't change
+- If a new GameMaster is downloaded, update the summary IVs
 
 Notes:
 - Need to use `node-fetch` because it is one of the only options that can use `commonjs`
