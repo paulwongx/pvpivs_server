@@ -69,8 +69,8 @@ export const getGameMaster = async ({
 			path.join(process.cwd(), "src", "data", "gameMaster.json"),
 			JSON.stringify(gm)
 		);
+        if (verbose) console.log("Finished downloading gameMaster.json");
 	}
-	if (verbose) console.log("Finished downloading gameMaster.json");
 	return gm;
 };
 

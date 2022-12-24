@@ -76,7 +76,7 @@ export const getNewIVs = async ({
     const files = fs.readdirSync(ivsPath);
 
     if (mons.length === files.length) {
-        if (verbose) console.log("All IVs already generated.");
+        if (verbose) console.log(`All ${mons.length} IVs already generated.`);
         return;
     }
 

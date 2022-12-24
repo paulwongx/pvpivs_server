@@ -40,7 +40,6 @@ export const scrapePopular = async () => {
 	return json;
 };
 
-
 const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
     const gameMaster = await getGameMaster({save:false});
 	const pokemon = gameMaster.pokemon as GameMasterPokemon[];
@@ -49,6 +48,7 @@ const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
         "Giratina (Altered Forme)": "giratina_altered",
         "Giratina (Origin Forme)": "giratina_origin",
         "Galarian Darmanitan": "darmanitan_galarian_standard",
+        "Darmanitan": "darmanitan_standard",
         "Galarian Mr. Mime": "mr_mime_galarian",
     }
 
