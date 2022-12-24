@@ -1,6 +1,6 @@
 import { getGameMaster, shouldSave } from "./getGameMaster";
 import { getPopular } from "./getPopular";
-import { getIVs, getSummary } from "./getIVs";
+import { getNewIVs, getSummary } from "./getIVs";
 
 // ts-node ./src/index.ts
 const downloadPopular = async () => {
@@ -12,12 +12,12 @@ const downloadGameMaster = async () => {
 };
 
 const generateIVs = async (gameMaster: any) => {
-	await getIVs({ gameMaster, save: true, verbose: true });
+	await getNewIVs({ gameMaster, save: true, verbose: true });
 	await getSummary({ save: true });
 };
 
 (async () => {
 	const gm = await downloadGameMaster();
 	await downloadPopular();
-	// await generateIVs(gm);
+	await generateIVs(gm);
 })();

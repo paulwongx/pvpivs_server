@@ -65,14 +65,36 @@ interface AppendIVsProps {
 	verbose?: boolean;
 }
 
-export const appendIVs = async ({
+export const getNewIVs = async ({
 	gameMaster,
 	save = true,
 	verbose = true,
 }: AppendIVsProps) => {
     let mons = gameMaster.pokemon as GameMasterPokemon[];
 
-    
+    const ivsPath = path.join(process.cwd(), "src", "data", "ivs");
+    const files = fs.readdirSync(ivsPath);
+
+    if (mons.length === files.length) {
+        if (verbose) console.log("All IVs already generated.");
+        return;
+    }
+
+    // rename the array of files to just be the speciesId
+    for (let i = 0; i < files.length; i++) {
+        const filename = files[i];
+        const idx = filename.indexOf("_");
+        const speciesId = filename.slice(idx + 1);
+        files[i] = speciesId;
+    }
+
+    for (let i = 0; i < mons.length; i++) {
+        const pokemon = mons[i] as GameMasterPokemon;
+        if (!files.includes(pokemon.speciesId)) {
+            if (verbose) console.log(`Generating **NEW**  IVs for ${pokemon.speciesId}`);
+            await getIV({ pokemon, save, verbose });
+        }
+    }
 };
 
 interface GetSummaryProps {
