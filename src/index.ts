@@ -1,36 +1,23 @@
-import fsp from "fs/promises";
-import fs from "fs";
 import { getGameMaster, shouldSave } from "./getGameMaster";
 import { getPopular } from "./getPopular";
-import path from "path";
+import { getIVs, getSummary } from "./getIVs";
 
 // ts-node ./src/index.ts
 const downloadPopular = async () => {
-	const data = await getPopular();
-	if (!data || data.pokemon.length === 0) return;
-	await fsp.writeFile(
-		path.join(process.cwd(), "src", "data", "popular.json"),
-		JSON.stringify(data)
-	);
-	console.log("Finished downloading popular.json");
+	return await getPopular({});
 };
 
 const downloadGameMaster = async () => {
-	const gameMaster = await getGameMaster();
-	if (!gameMaster || gameMaster.pokemon.length === 0) return;
-	if (!shouldSave(gameMaster)) {
-		return console.log(
-			`Did not save. GameMaster still has ${gameMaster.pokemon.length} pokemon`
-		);
-	}
-	await fsp.writeFile(
-		path.join(process.cwd(), "src", "data", "gameMaster.json"),
-		JSON.stringify(gameMaster)
-	);
-	console.log("Finished downloading gameMaster.json");
+	return await getGameMaster({});
+};
+
+const generateIVs = async (gameMaster: any) => {
+	await getIVs({ gameMaster, save: true, verbose: true });
+	await getSummary({ save: true });
 };
 
 (async () => {
-	await downloadGameMaster();
+	const gm = await downloadGameMaster();
 	await downloadPopular();
+	// await generateIVs(gm);
 })();

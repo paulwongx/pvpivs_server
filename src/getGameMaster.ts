@@ -46,10 +46,32 @@ export const shouldSave = (newGm: any) => {
 	return numInOldGm !== numInNewGm;
 };
 
-export const getGameMaster = async () => {
-	const gameMaster = await getRawGameMaster();
-	const filtered = filterGameMaster(gameMaster);
-	return filtered;
+interface GetGameMasterProps {
+	verbose?: boolean;
+	save?: boolean;
+};
+
+export const getGameMaster = async ({
+	save = true,
+	verbose = true,
+}: GetGameMasterProps | undefined) => {
+	const gmRaw = await getRawGameMaster();
+	const gm = filterGameMaster(gmRaw);
+	if (!shouldSave(gm)) {
+		if (verbose) {
+			console.log(
+				`Did not save. GameMaster still has ${gm.pokemon.length} pokemon`
+			);
+		}
+	}
+	if (save) {
+		fs.writeFileSync(
+			path.join(process.cwd(), "src", "data", "gameMaster.json"),
+			JSON.stringify(gm)
+		);
+	}
+	if (verbose) console.log("Finished downloading gameMaster.json");
+	return gm;
 };
 
 export interface GameMasterPokemon {

@@ -1,42 +1,4 @@
-export interface StatProduct {
-	// Attack product for the pokemon
-	aSt: number;
-	// Defense product for the pokemon
-	dSt: number;
-	// Stamina product for the pokemon
-	sSt: number;
-	// Combat Power of the pokemon
-	cp: number;
-	// Total stat product for the pokemon
-	sp: number;
-	// Custom stats for the pokemon
-	atk: number;
-	def: number;
-	sta: number;
-	lvl: number;
-}
-
-interface StatProductProps {
-	baseStats: {
-		atk: number;
-		def: number;
-		hp: number;
-	};
-	floor?: number;
-	minLevel?: number;
-	maxLevel?: number;
-    dex: number;
-	speciesId: string;
-	benchmark?: boolean;
-    verbose?: boolean;
-}
-
-interface TableRow extends StatProduct {
-	rank?: number;
-	per?: number;
-}
-
-export const statProduct = (props: StatProductProps) => {
+export const calculateIV = (props: CalculateIVProps) => {
 	const {
         dex,
         speciesId,
@@ -194,3 +156,41 @@ const cpm = [
 	0.82279999, 0.82529999, 0.82779999, 0.83029999, 0.83279999, 0.83529999,
 	0.83779999, 0.84029999, 0.84279999, 0.84529999,
 ];
+
+export interface StatProduct {
+	// Attack product for the pokemon
+	aSt: number;
+	// Defense product for the pokemon
+	dSt: number;
+	// Stamina product for the pokemon
+	sSt: number;
+	// Combat Power of the pokemon
+	cp: number;
+	// Total stat product for the pokemon
+	sp: number;
+	// Custom stats for the pokemon
+	atk: number;
+	def: number;
+	sta: number;
+	lvl: number;
+}
+
+interface CalculateIVProps {
+	baseStats: {
+		atk: number;
+		def: number;
+		hp: number;
+	};
+	floor?: number;
+	minLevel?: number;
+	maxLevel?: number;
+    dex: number;
+	speciesId: string;
+	benchmark?: boolean;
+    verbose?: boolean;
+}
+
+interface TableRow extends StatProduct {
+	rank?: number;
+	per?: number;
+}

@@ -1,7 +1,9 @@
+import fsp from 'fs/promises';
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 import { getGameMaster } from "./getGameMaster";
 import type { GameMasterPokemon } from "./getGameMaster";
+import path from 'path';
 
 interface PopularPokemon {
 	dex: number | null;
@@ -40,7 +42,7 @@ export const scrapePopular = async () => {
 
 
 const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
-    const gameMaster = await getGameMaster();
+    const gameMaster = await getGameMaster({save:false});
 	const pokemon = gameMaster.pokemon as GameMasterPokemon[];
 
     const nameMapping = {
@@ -100,11 +102,23 @@ const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
 	return mapped;
 };
 
-export const getPopular = async () => {
+interface GetPopularProps {
+    save?: boolean;
+    verbose?: boolean;
+}
+
+export const getPopular = async ({save = true, verbose = true}: GetPopularProps) => {
 	const raw = await scrapePopular();
 	if (!raw || raw.length === 0) return;
 
 	const pokemon = await mapNameToSpeciesId(raw);
-	console.log(`There are ${pokemon.length} popular Pokemon processed`);
-	return {date: new Date(), pokemon};
+    const popular = {date: new Date(), pokemon};
+
+    if (save) {
+        await fsp.writeFile(
+            path.join(process.cwd(), "src", "data", "popular.json"),
+            JSON.stringify(popular)
+        );
+        if (verbose) console.log("Finished downloading popular.json");
+    }
 };
