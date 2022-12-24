@@ -59,6 +59,22 @@ export const getIVs = async ({
 	}
 };
 
+interface AppendIVsProps {
+	gameMaster: any;
+	save?: boolean;
+	verbose?: boolean;
+}
+
+export const appendIVs = async ({
+	gameMaster,
+	save = true,
+	verbose = true,
+}: AppendIVsProps) => {
+    let mons = gameMaster.pokemon as GameMasterPokemon[];
+
+    
+};
+
 interface GetSummaryProps {
 	save?: boolean;
 }
