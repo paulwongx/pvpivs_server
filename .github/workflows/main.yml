@@ -1,8 +1,8 @@
 name: main
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   schedule:
     # Runs daily
     - cron:  '0 0 * * *'
