@@ -1,6 +1,7 @@
 import fs from "fs";
 import fetch from "node-fetch";
 import path from "path";
+import { PerformanceMark } from "perf_hooks";
 
 export const getRawGameMaster = async () => {
 	const url =
@@ -31,6 +32,34 @@ export const filterGameMaster = (gameMaster: any) => {
 	return gameMaster;
 };
 
+const specialCases = {
+    "mr_mime": "mr-mime",
+    "mr_mime_galarian": "mr-mime-galarian",
+}
+
+export const addImageIds = (gameMaster: any) => {
+    gameMaster.pokemon = gameMaster.pokemon.map((pkm: GameMasterPokemon) => {
+        let imgId = ""+pkm.dex;
+        if (pkm.speciesId.includes("_")) {
+            if (/mr_mime/.test(pkm.speciesId)) {
+                imgId = specialCases[pkm.speciesId];
+            } else {
+                const split = pkm.speciesId.split("_");
+                split.shift();
+                split.unshift(""+pkm.dex);
+                imgId = split.join("-");
+            }
+        }
+
+        const sprites = {
+            front_default_id: imgId
+        }
+
+        return {...pkm, sprites};
+    });
+    return gameMaster;
+};
+
 export const shouldSave = (newGm: any) => {
 	const oldGmPath = path.join(
 		process.cwd(),
@@ -56,7 +85,8 @@ export const getGameMaster = async ({
 	verbose = true,
 }: GetGameMasterProps | undefined) => {
 	const gmRaw = await getRawGameMaster();
-	const gm = filterGameMaster(gmRaw);
+	const filtered = filterGameMaster(gmRaw);
+    const gm = addImageIds(filtered);
 	if (!shouldSave(gm)) {
 		if (verbose) {
 			console.log(
@@ -68,6 +98,10 @@ export const getGameMaster = async ({
 		fs.writeFileSync(
 			path.join(process.cwd(), "src", "data", "gameMaster.json"),
 			JSON.stringify(gm)
+		);
+        fs.writeFileSync(
+			path.join(process.cwd(), "src", "data", "pokemon.json"),
+			JSON.stringify(gm.pokemon)
 		);
         if (verbose) console.log("Finished downloading gameMaster.json");
 	}
