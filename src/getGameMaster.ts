@@ -1,7 +1,6 @@
 import fs from "fs";
 import fetch from "node-fetch";
 import path from "path";
-import { PerformanceMark } from "perf_hooks";
 
 export const getRawGameMaster = async () => {
 	const url =
@@ -33,15 +32,29 @@ export const filterGameMaster = (gameMaster: any) => {
 };
 
 const specialCases = {
-    "mr_mime": "mr-mime",
-    "mr_mime_galarian": "mr-mime-galarian",
+    "mr_mime": "122",
+    "mr_mime_galarian": "122-galarian",
+    "ho_oh": "250",
+    "mime_jr": "439",
+    // "mime_jr_galarian": "439-galarian",
+    "porygon_z": "474",
+    "type_null": "772",
+    "jangmo_o": "782",
+    "hakamo_o": "783",
+    "kommo_o": "784",
+    "tapu_koko": "785",
+    "tapu_lele": "786",
+    "tapu_bulu": "787",
+    "tapu_fini": "788",
+    "mr_rime": "866",
+    
 }
 
 export const addImageIds = (gameMaster: any) => {
     gameMaster.pokemon = gameMaster.pokemon.map((pkm: GameMasterPokemon) => {
         let imgId = ""+pkm.dex;
         if (pkm.speciesId.includes("_")) {
-            if (/mr_mime/.test(pkm.speciesId)) {
+            if (pkm.speciesId in specialCases) {
                 imgId = specialCases[pkm.speciesId];
             } else {
                 const split = pkm.speciesId.split("_");

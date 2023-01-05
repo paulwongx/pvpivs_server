@@ -4011,7 +4011,7 @@
 		"thirdMoveCost": 75000,
 		"released": true,
 		"family": { "id": "FAMILY_MR_MIME", "parent": "mime_jr" },
-		"sprites": { "front_default_id": "mr-mime" }
+		"sprites": { "front_default_id": "122" }
 	},
 	{
 		"dex": 122,
@@ -4035,7 +4035,7 @@
 			"parent": "mime_jr",
 			"evolutions": ["mr_rime"]
 		},
-		"sprites": { "front_default_id": "mr-mime-galarian" }
+		"sprites": { "front_default_id": "122-galarian" }
 	},
 	{
 		"dex": 123,
