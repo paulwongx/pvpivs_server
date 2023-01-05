@@ -41,7 +41,13 @@ export const scrapePopular = async () => {
 };
 
 const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
-    const gameMaster = await getGameMaster({save:false});
+    const localGameMaster = await fsp.readFile(path.join(process.cwd(), "src", "data", "gameMaster.json"), "utf-8");
+    let gameMaster;
+    if (!localGameMaster) {
+        gameMaster = await getGameMaster({save:false});
+    } else {
+        gameMaster = JSON.parse(localGameMaster);
+    }
 	const pokemon = gameMaster.pokemon as GameMasterPokemon[];
 
     const nameMapping = {
@@ -50,6 +56,7 @@ const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
         "Galarian Darmanitan": "darmanitan_galarian_standard",
         "Darmanitan": "darmanitan_standard",
         "Galarian Mr. Mime": "mr_mime_galarian",
+        "Zacian - Hero of Many Battles": "zacian",
     }
 
 	let mapped = [];
