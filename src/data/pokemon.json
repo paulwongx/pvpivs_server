@@ -7763,7 +7763,7 @@
 		"buddyDistance": 20,
 		"thirdMoveCost": 100000,
 		"released": true,
-		"sprites": { "front_default_id": "250-oh" }
+		"sprites": { "front_default_id": "250" }
 	},
 	{
 		"dex": 251,
@@ -12576,7 +12576,7 @@
 		"thirdMoveCost": 10000,
 		"released": true,
 		"family": { "id": "FAMILY_MR_MIME", "evolutions": ["mr_mime"] },
-		"sprites": { "front_default_id": "439-jr" }
+		"sprites": { "front_default_id": "439" }
 	},
 	{
 		"dex": 440,
@@ -13455,7 +13455,7 @@
 		"thirdMoveCost": 50000,
 		"released": true,
 		"family": { "id": "FAMILY_PORYGON", "parent": "porygon2" },
-		"sprites": { "front_default_id": "474-z" }
+		"sprites": { "front_default_id": "474" }
 	},
 	{
 		"dex": 475,
@@ -21143,7 +21143,7 @@
 		"thirdMoveCost": 100000,
 		"released": false,
 		"family": { "id": "FAMILY_TYPE_NULL", "evolutions": ["silvally"] },
-		"sprites": { "front_default_id": "772-null" }
+		"sprites": { "front_default_id": "772" }
 	},
 	{
 		"dex": 773,
@@ -21654,7 +21654,7 @@
 		"thirdMoveCost": 75000,
 		"released": true,
 		"family": { "id": "FAMILY_JANGMO_O", "evolutions": ["hakamo_o"] },
-		"sprites": { "front_default_id": "782-o" }
+		"sprites": { "front_default_id": "782" }
 	},
 	{
 		"dex": 783,
@@ -21677,7 +21677,7 @@
 			"parent": "jangmo_o",
 			"evolutions": ["kommo_o"]
 		},
-		"sprites": { "front_default_id": "783-o" }
+		"sprites": { "front_default_id": "783" }
 	},
 	{
 		"dex": 784,
@@ -21697,7 +21697,7 @@
 		"thirdMoveCost": 75000,
 		"released": true,
 		"family": { "id": "FAMILY_JANGMO_O", "parent": "hakamo_o" },
-		"sprites": { "front_default_id": "784-o" }
+		"sprites": { "front_default_id": "784" }
 	},
 	{
 		"dex": 785,
@@ -21722,7 +21722,7 @@
 		"buddyDistance": 20,
 		"thirdMoveCost": 100000,
 		"released": true,
-		"sprites": { "front_default_id": "785-koko" }
+		"sprites": { "front_default_id": "785" }
 	},
 	{
 		"dex": 786,
@@ -21746,7 +21746,7 @@
 		"buddyDistance": 20,
 		"thirdMoveCost": 100000,
 		"released": true,
-		"sprites": { "front_default_id": "786-lele" }
+		"sprites": { "front_default_id": "786" }
 	},
 	{
 		"dex": 787,
@@ -21771,7 +21771,7 @@
 		"buddyDistance": 20,
 		"thirdMoveCost": 100000,
 		"released": true,
-		"sprites": { "front_default_id": "787-bulu" }
+		"sprites": { "front_default_id": "787" }
 	},
 	{
 		"dex": 788,
@@ -21810,7 +21810,7 @@
 		"buddyDistance": 20,
 		"thirdMoveCost": 100000,
 		"released": true,
-		"sprites": { "front_default_id": "788-fini" }
+		"sprites": { "front_default_id": "788" }
 	},
 	{
 		"dex": 789,
@@ -23566,7 +23566,7 @@
 		"thirdMoveCost": 75000,
 		"released": true,
 		"family": { "id": "FAMILY_MR_MIME", "parent": "mr_mime_galarian" },
-		"sprites": { "front_default_id": "866-rime" }
+		"sprites": { "front_default_id": "866" }
 	},
 	{
 		"dex": 867,

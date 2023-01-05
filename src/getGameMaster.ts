@@ -47,14 +47,14 @@ const specialCases = {
     "tapu_bulu": "787",
     "tapu_fini": "788",
     "mr_rime": "866",
-    
+
 }
 
 export const addImageIds = (gameMaster: any) => {
     gameMaster.pokemon = gameMaster.pokemon.map((pkm: GameMasterPokemon) => {
         let imgId = ""+pkm.dex;
         if (pkm.speciesId.includes("_")) {
-            if (pkm.speciesId in specialCases) {
+            if (specialCases[pkm.speciesId]) {
                 imgId = specialCases[pkm.speciesId];
             } else {
                 const split = pkm.speciesId.split("_");
