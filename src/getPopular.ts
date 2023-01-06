@@ -36,6 +36,7 @@ export const scrapePopular = async () => {
 			}
 		});
 	const json = res.filter(x => x.dex !== null);
+    console.log({json});
 
 	return json;
 };
@@ -105,8 +106,8 @@ const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
 			}
 		}
 	}
-
-	return mapped;
+    const unique = new Set(mapped);
+	return Array.from(unique);
 };
 
 interface GetPopularProps {
