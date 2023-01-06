@@ -1,9 +1,11 @@
 import fsp from 'fs/promises';
+import fs from "fs";
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 import { getGameMaster } from "./getGameMaster";
 import type { GameMasterPokemon } from "./getGameMaster";
 import path from 'path';
+import stringSimilarity from 'string-similarity';
 
 interface PopularPokemon {
 	dex: number | null;
@@ -36,78 +38,53 @@ export const scrapePopular = async () => {
 			}
 		});
 	const json = res.filter(x => x.dex !== null);
-    console.log({json});
+    // console.log({json});
 
 	return json;
 };
 
 const mapNameToSpeciesId = async (popular: PopularPokemon[]) => {
-    const localGameMaster = await fsp.readFile(path.join(process.cwd(), "src", "data", "gameMaster.json"), "utf-8");
-    let gameMaster;
-    if (!localGameMaster) {
+    const localRawGm = fs.readFileSync(path.join(process.cwd(), "src", "data", "gameMaster.json"), "utf-8");
+    let gameMaster = JSON.parse(localRawGm);
+    if (!gameMaster) {
         gameMaster = await getGameMaster({save:false});
-    } else {
-        gameMaster = JSON.parse(localGameMaster);
     }
+
 	const pokemon = gameMaster.pokemon as GameMasterPokemon[];
 
-    const nameMapping = {
-        "Giratina (Altered Forme)": "giratina_altered",
-        "Giratina (Origin Forme)": "giratina_origin",
+    const specialCases = {
         "Galarian Darmanitan": "darmanitan_galarian_standard",
         "Darmanitan": "darmanitan_standard",
-        "Galarian Mr. Mime": "mr_mime_galarian",
-        "Zacian - Hero of Many Battles": "zacian",
     }
 
-	let mapped = [];
-	for (let i = 0; i < popular.length; i++) {
-		const dex = popular[i].dex;
-		const name = popular[i].name;
+    popular = popular.filter(pkm => !/shadow/ig.test(pkm.name));
 
-        if (/shadow/ig.test(name)) continue;
+    const popularGm = new Set();
 
-		let gmPokemon = pokemon.filter(pkm => pkm.dex === dex);
-		if (gmPokemon.length === 1) {
-			mapped.push(gmPokemon[0]);
-		} else if (nameMapping[name]) {
-            gmPokemon = pokemon.filter(pkm => pkm.speciesId === nameMapping[name]);
-            mapped.push(gmPokemon[0]);
-        } else if (gmPokemon.length > 1) {
-			let encoded = name.replace(/[.*+?^${}()|[\]\\]/g, "");
-			let encoded1 = encoded
-				.trim()
-				.split(/[\s-]+/)
-				.join("_");
-			let encoded2 = encoded
-				.trim()
-				.split(/[\s-]+/)
-				.reverse()
-				.join("_");
+    for (let pop of popular) {
+        const {dex, name} = pop;
+        let filteredPkm = pokemon.filter(pkm => pkm.dex === dex);
+        if (filteredPkm.length === 1) {
+            popularGm.add(filteredPkm[0]);
+            continue;
+        }
+        if (filteredPkm.length > 1) {
+            if (specialCases[name]) {
+                popularGm.add(filteredPkm.find(pkm => pkm.speciesId === specialCases[name]));
+                continue;
+            }
 
-			const regex1 = new RegExp(`^${encoded1}$`, "ig");
-			const regex2 = new RegExp(`^${encoded2}$`, "ig");
-
-			let sel = [];
-			sel = gmPokemon.filter(p => regex1.test(p.speciesId));
-			if (sel.length === 0) {
-				sel = gmPokemon.filter(p => regex2.test(p.speciesId));
-			}
-			if (sel.length === 1) {
-				mapped.push(sel[0]);
-			} else {
-				console.log(
-					`Could not map the following pokemon to speciesId: ${JSON.stringify({
-						dex,
-						name,
-						sel,
-					},null,4)}`
-				);
-			}
-		}
-	}
-    const unique = new Set(mapped);
-	return Array.from(unique);
+            let gmNames = filteredPkm.map(pkm => pkm.speciesName);
+            const best = stringSimilarity.findBestMatch(name, gmNames);
+            // console.log("Fuzzy matched", {name, best: filteredPkm[best.bestMatchIndex].speciesId});
+            if (best) {
+                popularGm.add(filteredPkm[best.bestMatchIndex]);
+                continue;
+            }
+        }
+        console.log("No pokemon found for", name);
+    }
+	return Array.from(popularGm);
 };
 
 interface GetPopularProps {
