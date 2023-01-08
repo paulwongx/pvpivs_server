@@ -19,6 +19,6 @@ const generateIVs = async (gameMaster: any) => {
 (async () => {
 	const gm = await downloadGameMaster();
 	await downloadPopular();
-	// await generateIVs(gm);
+	await generateIVs(gm);
     return;
 })();

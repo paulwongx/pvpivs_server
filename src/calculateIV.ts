@@ -1,3 +1,18 @@
+interface CalculateIVProps {
+	baseStats: {
+		atk: number;
+		def: number;
+		hp: number;
+	};
+	floor?: number;
+	minLevel?: number;
+	maxLevel?: number;
+    dex: number;
+	speciesId: string;
+	benchmark?: boolean;
+    verbose?: boolean;
+}
+
 export const calculateIV = (props: CalculateIVProps) => {
 	const {
         dex,
@@ -98,7 +113,7 @@ export const calculateIV = (props: CalculateIVProps) => {
 		}
 	}
 
-	let t1 = new Date().getTime();
+	const t1 = new Date().getTime();
 	if (benchmark) {
 		console.log(`Building time: ${t1 - t0} ms`);
 	}
@@ -173,21 +188,6 @@ export interface StatProduct {
 	def: number;
 	sta: number;
 	lvl: number;
-}
-
-interface CalculateIVProps {
-	baseStats: {
-		atk: number;
-		def: number;
-		hp: number;
-	};
-	floor?: number;
-	minLevel?: number;
-	maxLevel?: number;
-    dex: number;
-	speciesId: string;
-	benchmark?: boolean;
-    verbose?: boolean;
 }
 
 interface TableRow extends StatProduct {
