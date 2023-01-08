@@ -7,5 +7,5 @@
 		"src/**/*.ts",
 		"src/data/*.json",
 	],
-	"exclude": ["src/**/*.spec.ts", "src/data/ivs/*.json", "src/data/sprites/*", "node_modules"]
+	"exclude": ["src/**/*.spec.ts", "src/data/ivs/*.json", "src/data/sprites/*.png", "node_modules"]
 }
