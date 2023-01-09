@@ -3,5 +3,5 @@
 node_modules
 dist/**
 trash
-src/data/ivs/*.json
+# src/data/ivs/*.json
 yarn.lock
