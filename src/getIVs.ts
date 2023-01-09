@@ -1,10 +1,10 @@
 import fs from "fs";
 import path from "path";
 import { calculateIV } from "./calculateIV";
-import { GameMasterPokemon } from "./getGameMaster";
+import { Pokemon } from "./getGameMaster";
 
 interface GetIVProps {
-	pokemon: GameMasterPokemon;
+	pokemon: Pokemon;
 	save?: boolean;
 	verbose?: boolean;
 }
@@ -12,13 +12,14 @@ interface GetIVProps {
 const getIV = async (props: GetIVProps) => {
 	const { pokemon, save, verbose } = props;
 	new Promise(async (resolve, reject) => {
-		const json = calculateIV({
+		const ivs = calculateIV({
 			baseStats: pokemon.baseStats,
 			dex: pokemon.dex,
 			speciesId: pokemon.speciesId,
 			benchmark: false,
 			verbose: true,
 		});
+        const pokemonWithIVs = {...pokemon, ivs};
 
 		if (save) {
 			fs.writeFileSync(
@@ -27,16 +28,16 @@ const getIV = async (props: GetIVProps) => {
 					"src",
 					"data",
 					"ivs",
-					`${pokemon.dex}_${pokemon.speciesId}.json`
+					`${pokemon.speciesId}.json`
 				),
-				JSON.stringify(json)
+				JSON.stringify(pokemonWithIVs)
 			);
 		}
 
 		if (verbose) {
 			console.log(`Finished with #${pokemon.dex} ${pokemon.speciesId}`);
 		}
-		resolve(json);
+		resolve(pokemonWithIVs);
 	});
 };
 
@@ -51,10 +52,10 @@ export const getIVs = async ({
 	save = true,
 	verbose = true,
 }: GetIVsProps) => {
-	let mons = gameMaster.pokemon as GameMasterPokemon[];
+	let mons = gameMaster.pokemon as Pokemon[];
 
 	for (let i = 0; i < mons.length; i++) {
-		const pokemon = mons[i] as GameMasterPokemon;
+		const pokemon = mons[i] as Pokemon;
 		await getIV({ pokemon, save, verbose });
 	}
 };
@@ -70,9 +71,12 @@ export const getNewIVs = async ({
 	save = true,
 	verbose = true,
 }: AppendIVsProps) => {
-    let mons = gameMaster.pokemon as GameMasterPokemon[];
+    let mons = gameMaster.pokemon as Pokemon[];
 
     const ivsPath = path.join(process.cwd(), "src", "data", "ivs");
+    if (!fs.existsSync(ivsPath)) {
+        fs.mkdirSync(ivsPath);
+    }
     const files = fs.readdirSync(ivsPath);
 
     if (mons.length === files.length) {
@@ -80,16 +84,8 @@ export const getNewIVs = async ({
         return;
     }
 
-    // rename the array of files to just be the speciesId
-    for (let i = 0; i < files.length; i++) {
-        const filename = files[i];
-        const idx = filename.indexOf("_");
-        const speciesId = filename.slice(idx + 1);
-        files[i] = speciesId;
-    }
-
     for (let i = 0; i < mons.length; i++) {
-        const pokemon = mons[i] as GameMasterPokemon;
+        const pokemon = mons[i] as Pokemon;
         if (!files.includes(pokemon.speciesId)) {
             if (verbose) console.log(`Generating **NEW**  IVs for ${pokemon.speciesId}`);
             await getIV({ pokemon, save, verbose });
@@ -115,12 +111,13 @@ export const getSummary = async ({ save = true }: GetSummaryProps) => {
 		const json = JSON.parse(raw.toString());
 
 		const pkmn = {
-			speciesId: json.pokemon.speciesId,
-			dex: json.pokemon.dex,
-			cp500: json.ivs.cp500[0],
-			cp1500: json.ivs.cp1500[0],
-			cp2500: json.ivs.cp2500[0],
-			cpMax: json.ivs.cpMax[0],
+			...json,
+			ivs: {
+                cp500: [json.ivs.cp500[0]],
+                cp1500: [json.ivs.cp1500[0]],
+                cp2500: [json.ivs.cp2500[0]],
+                cpMax: [json.ivs.cpMax[0]],
+            }
 		};
 
 		summary.push(pkmn);
@@ -128,7 +125,7 @@ export const getSummary = async ({ save = true }: GetSummaryProps) => {
 
 	if (save) {
 		fs.writeFileSync(
-			path.join(process.cwd(), "src", "data", "summary.json"),
+			path.join(process.cwd(), "src", "data", "rank1Summary.json"),
 			JSON.stringify(summary)
 		);
 	}

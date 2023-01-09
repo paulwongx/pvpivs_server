@@ -1,6 +1,7 @@
 import fs from "fs";
 import fetch from "node-fetch";
 import path from "path";
+import { IIVs } from "./calculateIV";
 
 export const getRawGameMaster = async () => {
 	const url =
@@ -51,7 +52,7 @@ const specialCases = {
 }
 
 export const addImageIds = (gameMaster: any) => {
-    gameMaster.pokemon = gameMaster.pokemon.map((pkm: GameMasterPokemon) => {
+    gameMaster.pokemon = gameMaster.pokemon.map((pkm: Pokemon) => {
         let imgId = ""+pkm.dex;
         if (pkm.speciesId.includes("_")) {
             if (specialCases[pkm.speciesId]) {
@@ -121,7 +122,7 @@ export const getGameMaster = async ({
 	return gm;
 };
 
-export interface GameMasterPokemon {
+export interface Pokemon {
 	dex: number;
 	speciesName: string;
 	speciesId: string;
@@ -147,4 +148,12 @@ export interface GameMasterPokemon {
 		id: string;
 		evolutions: string[];
 	};
+}
+
+export interface GameMaster {
+    pokemon: Pokemon[];
+}
+
+export interface PokemonIVs extends Pokemon {
+    ivs: IIVs;
 }

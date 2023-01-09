@@ -7,16 +7,16 @@ interface CalculateIVProps {
 	floor?: number;
 	minLevel?: number;
 	maxLevel?: number;
-    dex: number;
+	dex: number;
 	speciesId: string;
 	benchmark?: boolean;
-    verbose?: boolean;
+	verbose?: boolean;
 }
 
 export const calculateIV = (props: CalculateIVProps) => {
 	const {
-        dex,
-        speciesId,
+		dex,
+		speciesId,
 		baseStats: base,
 		floor = 0,
 		maxLevel = 50,
@@ -137,16 +137,10 @@ export const calculateIV = (props: CalculateIVProps) => {
 	}
 
 	return {
-        pokemon: {
-            dex,
-            speciesId,
-        },
-        ivs: {
-            cp500,
-            cp1500,
-            cp2500,
-            cpMax,
-        }
+		cp500,
+		cp1500,
+		cp2500,
+		cpMax,
 	};
 };
 
@@ -173,14 +167,14 @@ const cpm = [
 ];
 
 export interface StatProduct {
+	// Combat Power of the pokemon
+	cp: number;
 	// Attack product for the pokemon
 	aSt: number;
 	// Defense product for the pokemon
 	dSt: number;
 	// Stamina product for the pokemon
 	sSt: number;
-	// Combat Power of the pokemon
-	cp: number;
 	// Total stat product for the pokemon
 	sp: number;
 	// Custom stats for the pokemon
@@ -194,3 +188,10 @@ interface TableRow extends StatProduct {
 	rank?: number;
 	per?: number;
 }
+
+export interface IIVs {
+    cp500: StatProduct[];
+    cp1500: StatProduct[];
+    cp2500: StatProduct[];
+    cpMax: StatProduct[];
+  }
